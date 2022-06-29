@@ -29,6 +29,7 @@ def pushMsg(msg):
 
 
 def task():
+    print(f'{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}执行任务')
     data = {"email": env('EMAIL'), "password": env("PASSWORD")}
 
     session = requests.Session()
@@ -60,6 +61,6 @@ def task():
 
 if __name__ == "__main__":
     task()
-    scheduler = BlockingScheduler()
+    scheduler = BlockingScheduler(timezone='Asia/Shanghai')
     scheduler.add_job(task, 'cron', day_of_week='1-5', hour="8,13,17", minute=40)
     scheduler.start()
