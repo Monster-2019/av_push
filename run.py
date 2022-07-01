@@ -21,7 +21,7 @@ headers = {"Content-Type": "application/json"}
 
 def pushMsg(msg):
     data = {
-        "token": env('PUSH_TOKEN'),
+        "token": env("PUSH_TOKEN"),
         "title": "ActionView提醒",
         "content": f"ActionView提醒，BUG: {msg['b']}，任务: {msg['t']}，其他: {msg['o']}",
     }
@@ -29,8 +29,8 @@ def pushMsg(msg):
 
 
 def task():
-    print(f'{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}执行任务')
-    data = {"email": env('EMAIL'), "password": env("PASSWORD")}
+    print(f"{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}执行任务")
+    data = {"email": env("EMAIL"), "password": env("PASSWORD")}
 
     session = requests.Session()
     session.post(LOGIN_URL, headers=headers, data=json.dumps(data))
@@ -61,6 +61,6 @@ def task():
 
 if __name__ == "__main__":
     task()
-    scheduler = BlockingScheduler(timezone='Asia/Shanghai')
-    scheduler.add_job(task, 'cron', day_of_week='1-5', hour="8,13,17", minute=40)
+    scheduler = BlockingScheduler(timezone="Asia/Shanghai")
+    scheduler.add_job(task, "cron", day_of_week="mon-fri", hour="8,13,17", minute=40)
     scheduler.start()
