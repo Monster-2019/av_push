@@ -29,7 +29,7 @@ def pushMsg(msg):
 
 
 def task():
-    print(f"{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}执行任务")
+    print(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}执行任务")
     data = {"email": env("EMAIL"), "password": env("PASSWORD")}
 
     session = requests.Session()
