@@ -71,5 +71,5 @@ def weekReport():
 if __name__ == "__main__":
     task()
     scheduler = BlockingScheduler(timezone="Asia/Shanghai")
-    scheduler.add_job(task, "cron", day_of_week="mon-fri", hour="8,13,17", minute=40)
+    scheduler.add_job(task, "cron", day_of_week="mon-fri", hour="8,13,17", minute=40, max_instances=10)
     scheduler.start()
