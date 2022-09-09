@@ -1,11 +1,11 @@
-import requests
-import time
-import json
+from requests import Session, request
+from time import time
+from json import dumps
 from datetime import datetime
 from environs import Env
 from apscheduler.schedulers.blocking import BlockingScheduler
 
-session = requests.Session()
+session = Session()
 
 env = Env()
 env.read_env()
@@ -27,15 +27,15 @@ def pushMsg(msg):
         "content": f"ActionView提醒，BUG: {msg['b']}，任务: {msg['t']}，其他: {msg['o']}",
         "tempalte": "text"
     }
-    res = requests.request("POST", PUHS_URL, headers=headers, data=json.dumps(data))
+    res = request("POST", PUHS_URL, headers=headers, data=dumps(data))
     print(res.text)
 
 def task():
     print(f"{datetime.now()}遍历bug池")
     data = {"email": env("EMAIL"), "password": env("PASSWORD")}
 
-    session = requests.Session()
-    session.post(LOGIN_URL, headers=headers, data=json.dumps(data))
+    session = Session()
+    session.post(LOGIN_URL, headers=headers, data=dumps(data))
 
     result = {
         "b": 0,
@@ -43,7 +43,7 @@ def task():
         "o": 0,
     }
 
-    params = f"?assignee=me&resolution=Unresolved&state=Open&page=1&requested_at=${int(time.time()) * 1000}"
+    params = f"?assignee=me&resolution=Unresolved&state=Open&page=1&requested_at=${int(time()) * 1000}"
 
     url = TASK_URL + params
 
@@ -65,8 +65,8 @@ def weekReport():
     print(f"{datetime.now()}遍历周报")
     data = {"email": env("EMAIL"), "password": env("PASSWORD")}
 
-    session = requests.Session()
-    session.post(LOGIN_URL, headers=headers, data=json.dumps(data))
+    session = Session()
+    session.post(LOGIN_URL, headers=headers, data=dumps(data))
 
 if __name__ == "__main__":
     task()
