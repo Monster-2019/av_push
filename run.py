@@ -1,6 +1,7 @@
 import requests
 import time
 import json
+from datetime import datetime
 from environs import Env
 from apscheduler.schedulers.blocking import BlockingScheduler
 
@@ -10,7 +11,7 @@ env = Env()
 env.read_env()
 
 BASE_URL = "https://actionview.knowyourself.cc/actionview/api"
-PUHS_URL = "http://www.pushplus.plus/send"
+PUHS_URL = "https://push.dongxin.cool/v1/message/send"
 
 LOGIN_URL = BASE_URL + "/session"
 TASK_URL = BASE_URL + "/project/p_kyapp/issue"
@@ -24,12 +25,13 @@ def pushMsg(msg):
         "token": env("PUSH_TOKEN"),
         "title": "ActionView提醒",
         "content": f"ActionView提醒，BUG: {msg['b']}，任务: {msg['t']}，其他: {msg['o']}",
+        "tempalte": "text"
     }
-    requests.post(PUHS_URL, data=data)
-
+    res = requests.request("POST", PUHS_URL, headers=headers, data=json.dumps(data))
+    print(res.text)
 
 def task():
-    print(f"{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}执行任务")
+    print(f"{datetime.now()}遍历bug池")
     data = {"email": env("EMAIL"), "password": env("PASSWORD")}
 
     session = requests.Session()
@@ -58,6 +60,13 @@ def task():
             continue
 
     pushMsg(result)
+
+def weekReport():
+    print(f"{datetime.now()}遍历周报")
+    data = {"email": env("EMAIL"), "password": env("PASSWORD")}
+
+    session = requests.Session()
+    session.post(LOGIN_URL, headers=headers, data=json.dumps(data))
 
 if __name__ == "__main__":
     task()
