@@ -12,13 +12,8 @@ RUN pip install pyinstaller
 
 COPY . .
 
-RUN pyinstaller -D -F run.py
+RUN pyinstaller -F run.py
 
-CMD cd dist; ls; ["run.exe"]
+WORKDIR /app/dist
 
-# FROM python:3-alpine
-
-# WORKDIR /app
-
-# COPY --from=build /app/dist .
-# CMD ["run.exe"]
+CMD ./run
