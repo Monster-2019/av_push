@@ -4,6 +4,7 @@ from json import dumps
 from datetime import datetime
 from environs import Env
 from apscheduler.schedulers.blocking import BlockingScheduler
+from loguru import logger
 
 session = Session()
 
@@ -20,6 +21,8 @@ TYPE = {"BUG": "8", "TASK": "6"}
 
 headers = {"Content-Type": "application/json"}
 
+log_id = logger.add('run.log', rotation="1 week", encoding="utf-8", retention="7 days", backtrace=True, catch=True)
+
 def pushMsg(msg):
     data = {
         "token": env("PUSH_TOKEN"),
@@ -28,10 +31,13 @@ def pushMsg(msg):
         "tempalte": "text"
     }
     res = request("POST", PUHS_URL, headers=headers, data=dumps(data))
-    print(res.text)
+    if res.status_code == 200:
+        logger.info('已发送通知')
+    else:
+        logger.info('通知异常')
 
 def task():
-    print(f"{datetime.now()}遍历bug池")
+    logger.info('{}遍历bug池', datetime.now())
     data = {"email": env("EMAIL"), "password": env("PASSWORD")}
 
     session = Session()
