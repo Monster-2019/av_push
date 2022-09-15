@@ -41,6 +41,7 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
             docker stop av_push
+            docker rm av_push
             docker pull registry.cn-hangzhou.aliyuncs.com/dongxin/av_push
             docker create --name av_push -v /etc/timezone:/etc/timezone:ro -v /etc/localtime:/etc/localtime:ro registry.cn-hangzhou.aliyuncs.com/dongxin/av_push
             docker cp /var/local/av_push/.env av_push:/app/.env
