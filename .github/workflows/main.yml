@@ -37,12 +37,12 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
-          username: root
+          username: ubuntu
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
-            docker stop av_push
-            docker rm av_push
-            docker pull registry.cn-hangzhou.aliyuncs.com/dongxin/av_push
-            docker create --name av_push -v /etc/timezone:/etc/timezone:ro -v /etc/localtime:/etc/localtime:ro registry.cn-hangzhou.aliyuncs.com/dongxin/av_push
-            docker cp /var/local/av_push/.env av_push:/app/.env
-            docker start av_push
+            sudo docker stop av_push
+            sudo docker rm av_push
+            sudo docker pull registry.cn-hangzhou.aliyuncs.com/dongxin/av_push
+            sudo docker create --name av_push -v /etc/timezone:/etc/timezone:ro -v /etc/localtime:/etc/localtime:ro registry.cn-hangzhou.aliyuncs.com/dongxin/av_push
+            sudo docker cp /opt/env/av_push.env av_push:/app/.env
+            sudo docker start av_push
