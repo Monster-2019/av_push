@@ -12,7 +12,7 @@ env = Env()
 env.read_env()
 
 BASE_URL = "https://actionview.knowyourself.cc/actionview/api"
-PUHS_URL = "https://push.dongxin.cool/v1/message/send"
+PUHS_URL = "https://push.dongxin.co/v1/message/send"
 
 LOGIN_URL = BASE_URL + "/session"
 TASK_URL = BASE_URL + "/project/p_kyapp/issue"
