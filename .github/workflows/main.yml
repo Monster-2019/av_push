@@ -27,7 +27,7 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: registry.cn-hangzhou.aliyuncs.com/dongxin/av_push
+          tags: registry.cn-hangzhou.aliyuncs.com/dongxin/av_push:latest
 
   deploy:
     needs: build
@@ -40,9 +40,5 @@ jobs:
           username: ubuntu
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
-            sudo docker stop av_push
-            sudo docker rm av_push
-            sudo docker pull registry.cn-hangzhou.aliyuncs.com/dongxin/av_push
-            sudo docker create --name av_push -v /etc/timezone:/etc/timezone:ro -v /etc/localtime:/etc/localtime:ro registry.cn-hangzhou.aliyuncs.com/dongxin/av_push
-            sudo docker cp /opt/env/av_push.env av_push:/app/.env
-            sudo docker start av_push
+            sudo docker compose -f /opt/compose/av_push/docker-compose.yml pull av_push
+            sudo docker compose -f /opt/compose/av_push/docker-compose.yml up -d --build av_push
